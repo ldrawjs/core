@@ -18,12 +18,12 @@ export type ShapeLine = LineLine | TriLine | QuadLine | OptLine;
 export type AnyLine = MetaLine | PartLine | LineLine | TriLine | QuadLine | OptLine;
 export type LDrawJson = AnyLine[];
 
-// Fetcher
+// Collector / Fetcher
 
 export type Fetcher = (part: string) => Promise<LDrawJson>;
 export type Collected = Map<string, LDrawJson>;
 
-// LDrawDoc
+// LDrawDoc parsed document
 
 export type LDrawMetaLine = [LineType.Meta, ...string[]];
 export type LDrawPartLine = [LineType.Part, C, PART, Matrix4, boolean[]];
