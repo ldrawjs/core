@@ -13,9 +13,9 @@ import type {
     PartLine,
     QuadLine,
     TriLine
-} from './types';
-import { LineType, ROOT_MODEL } from './consts';
-import ParserContext from './utils/parser-context';
+} from './types.js';
+import { LineType, ROOT_MODEL } from './consts.js';
+import ParserContext from './utils/parser-context.js';
 
 export default function convert(doc: Collected): LDrawDocuments {
     const root = doc.get(ROOT_MODEL) as LDrawJson;

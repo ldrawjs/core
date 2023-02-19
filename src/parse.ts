@@ -1,4 +1,4 @@
-import { LDrawJson, MetaLine, PartLine, ShapeLine } from './types';
+import type { LDrawJson, MetaLine, PartLine, ShapeLine } from './types.js';
 
 export default function parse(ldrawString: string): LDrawJson {
     return ldrawString.split('\n')

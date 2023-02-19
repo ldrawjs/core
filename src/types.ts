@@ -1,4 +1,4 @@
-import { LineType } from './consts';
+import { LineType } from './consts.js';
 import { Matrix4, Vector3 } from 'three';
 
 // LDrawJson raw document
