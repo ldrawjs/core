@@ -41,4 +41,6 @@ export default function generate(docs: LDrawDocuments) {
         cache.set(name, group);
         return group;
     };
+
+    return build(ROOT_MODEL, root);
 }
