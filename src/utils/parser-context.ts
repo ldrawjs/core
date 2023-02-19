@@ -10,9 +10,9 @@ import type {
     PartLine,
     QuadLine,
     TriLine
-} from '../types';
+} from '../types.js';
 import { Matrix4, Vector3 } from 'three';
-import vectorized from './vectorized';
+import vectorized from './vectorized.js';
 
 export default class ParserContext {
     type = '';

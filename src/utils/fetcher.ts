@@ -1,6 +1,6 @@
-import type { LDrawJson } from '../types';
+import type { LDrawJson } from '../types.js';
 // temporary impl.
-import { read, write } from './storage';
+import { read, write } from './storage.js';
 
 
 const URL = 'https://raw.githubusercontent.com/ziv/ldr-db/main/l';
