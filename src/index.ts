@@ -1,6 +1,6 @@
-import collect from './collect';
-import convert from './convert';
-import generate from './generate';
-import parse from './parse';
+import collect from './collect.js';
+import convert from './convert.js';
+import generate from './generate.js';
+import parse from './parse.js';
 
 export { collect, convert, generate, parse };

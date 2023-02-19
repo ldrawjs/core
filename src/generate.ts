@@ -1,5 +1,5 @@
-import { LDrawDoc, LDrawDocuments, PART } from './types';
-import { ROOT_MODEL } from './consts';
+import type { LDrawDoc, LDrawDocuments, PART } from './types.js';
+import { ROOT_MODEL } from './consts.js';
 import { BufferGeometry, Group, Line, LineBasicMaterial, Mesh, MeshBasicMaterial } from 'three';
 
 // todo handle colors, materials, steps, ...

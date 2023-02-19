@@ -1,5 +1,5 @@
-import { AnyLine, Collected, Fetcher, LDrawJson, PartLine } from './types';
-import { LineType, ROOT_MODEL } from './consts';
+import { AnyLine, Collected, Fetcher, LDrawJson, PartLine } from './types.js';
+import { LineType, ROOT_MODEL } from './consts.js';
 
 export default async function collect(doc: LDrawJson, fetcher: Fetcher): Promise<Collected> {
     const parts = new Map<string, AnyLine[]>();
