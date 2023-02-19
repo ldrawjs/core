@@ -6,7 +6,7 @@ export default async function collect(doc: LDrawJson, fetcher: Fetcher): Promise
 
     const getParts = (lines: AnyLine[]) => lines
         .filter((line: AnyLine) => line[0] === LineType.Part)
-        .map((line: PartLine) => line[14])
+        .map((line: AnyLine) => (line as PartLine)[14])
         .filter(part => !parts.has(part));
 
     const collect = async (name: string, lines: AnyLine[]) => {

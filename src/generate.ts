@@ -12,7 +12,7 @@ export default function generate(docs: LDrawDocuments) {
         const group = new Group();
 
         for (const [_, c, partName, matrix] of parts) {
-            const part = cache.has(partName) ? (cache.get(partName) as Group) : build(partName, docs.get(partName));
+            const part = cache.has(partName) ? (cache.get(partName) as Group) : build(partName, docs.get(partName) as LDrawDoc);
             const g = part.clone();
             g.applyMatrix4(matrix);
             group.add(g);
