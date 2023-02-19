@@ -2,7 +2,7 @@ import { LDrawDoc, LDrawDocuments, PART } from './types';
 import { ROOT_MODEL } from './consts';
 import { BufferGeometry, Group, Line, LineBasicMaterial, Mesh, MeshBasicMaterial } from 'three';
 
-// todo handle colors, materials
+// todo handle colors, materials, steps, ...
 
 export default function generate(docs: LDrawDocuments) {
     const root = docs.get(ROOT_MODEL) as LDrawDoc;

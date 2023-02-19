@@ -1,8 +1,9 @@
 {
   "name": "@ldrawjs/core",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "description": "utils",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "build": "tsc && cp package.json lib/.",
     "test": "echo \"Error: no test specified\" && exit 1"

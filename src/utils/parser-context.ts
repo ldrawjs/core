@@ -1,27 +1,21 @@
 import type {
-    AnyLine,
     LDrawLineLine,
     LDrawOptLine,
     LDrawPartLine,
     LDrawQuadLine,
-    LDrawTriLine, LineLine,
-    MetaLine, OptLine,
-    PartLine, QuadLine, TriLine
+    LDrawTriLine,
+    LineLine,
+    MetaLine,
+    OptLine,
+    PartLine,
+    QuadLine,
+    TriLine
 } from '../types';
 import { Matrix4, Vector3 } from 'three';
-import { LineType } from '../consts';
 import vectorized from './vectorized';
 
 export default class ParserContext {
     type = '';
-    // model
-    category = null;
-    keywords = null;
-    author = null;
-
-    parsingEmbeddedFiles = false;
-    currentEmbeddedFileName = null;
-    currentEmbeddedText = null;
 
     // internal state
     bfcCertified = false;
@@ -33,25 +27,6 @@ export default class ParserContext {
     get doubleSided(): boolean {
         return !this.bfcCertified || !this.bfcCull;
     }
-
-    // handle(line: AnyLine[]) {
-    //     const method = line[0] as unknown as LineType;
-    //     console.log(method);
-    //     switch (method) {
-    //         case LineType.Meta:
-    //             return this.meta(line);
-    //         case LineType.Part:
-    //             return this.part(line);
-    //         case LineType.Line:
-    //             return this.line(line);
-    //         case LineType.Triangle:
-    //             return this.triangle(line);
-    //         case LineType.Quad:
-    //             return this.quad(line);
-    //         case LineType.OptionalLine:
-    //             return this.optLine(line);
-    //     }
-    // }
 
     meta([_, meta, ...values]: MetaLine) {
         switch (meta) {
