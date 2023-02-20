@@ -1,29 +1,31 @@
 import type { LDrawDoc, LDrawDocuments, PART } from "./types.ts";
 import { ROOT_MODEL } from "./consts.ts";
-import {
-  BufferGeometry,
-  Group,
-  Line,
-  LineBasicMaterial,
-  Mesh,
-  MeshBasicMaterial,
-} from "https://esm.sh/three";
+import three from "./utils/three.ts";
 
 // todo handle colors, materials, steps, ...
 
-export default function generate(docs: LDrawDocuments) {
+export default async function generate(docs: LDrawDocuments) {
+  const {
+    BufferGeometry,
+    Group,
+    Line,
+    LineBasicMaterial,
+    Mesh,
+    MeshBasicMaterial,
+  } = await three();
+
   const root = docs.get(ROOT_MODEL) as LDrawDoc;
-  const cache = new Map<string, Group>();
+  const cache = new Map<string, unknown>();
 
   const build = (
     name: PART,
     [_, faces, lines, optLines, parts]: LDrawDoc,
-  ): Group => {
+  ): any /*Group*/ => {
     const group = new Group();
 
     for (const [_, c, partName, matrix] of parts) {
       const part = cache.has(partName)
-        ? (cache.get(partName) as Group)
+        ? (cache.get(partName) as typeof Group)
         : build(partName, docs.get(partName) as LDrawDoc);
       const g = part.clone();
       g.applyMatrix4(matrix);

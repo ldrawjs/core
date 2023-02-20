@@ -16,16 +16,7 @@ import type {
   TriLine,
 } from "./types.ts";
 import { LineType, ROOT_MODEL } from "./consts.ts";
-import { Matrix4, Vector3 } from "https://esm.sh/three";
-
-function vectorized(...points: number[]) {
-  const vec: Vector3[] = [];
-  while (points.length) {
-    const [x, y, z] = points.splice(0, 3);
-    vec.push(new Vector3(x, y, z));
-  }
-  return vec;
-}
+import three from "./utils/three.ts";
 
 class ParserContext {
   bfcCertified = false;
@@ -39,10 +30,20 @@ class ParserContext {
   }
 }
 
-export default function convert(doc: Collected): LDrawDocuments {
+export default async function convert(doc: Collected): Promise<LDrawDocuments> {
+  const { Matrix4, Vector3 } = await three();
   const root = doc.get(ROOT_MODEL) as LDrawJson;
   const cache = new Map<string, LDrawDoc>();
   const ctx = new ParserContext();
+
+  const vectorized = (...points: number[]) => {
+    const vec: any[] = [];
+    while (points.length) {
+      const [x, y, z] = points.splice(0, 3);
+      vec.push(new Vector3(x, y, z));
+    }
+    return vec;
+  };
 
   const build = (name: string, items: LDrawJson): LDrawDoc => {
     let type = "";
@@ -141,7 +142,7 @@ export default function convert(doc: Collected): LDrawDocuments {
       },
 
       [LineType.Line]: ([type, color, ...n]: LineLine) =>
-        lines.push([type, color, vectorized(...n) as [Vector3, Vector3]]),
+        lines.push([type, color, vectorized(...n) as [any, any]]),
 
       [LineType.OptionalLine]: ([type, color, ...n]: OptLine) => {
         const [v0, v1, c0, c1] = vectorized(...n);
