@@ -1,4 +1,4 @@
-import type { Matrix4 as MAT, Vector3 as VEC } from "https://esm.sh/three";
+import type { MAT, VEC } from "./three.ts";
 import { LineType } from "./consts.ts";
 
 export type N = number;

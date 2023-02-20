@@ -15,9 +15,9 @@ import type {
   QuadLine,
   TriLine,
 } from "./types.ts";
+import type { VEC } from "./three.ts";
 import { LineType, ROOT_MODEL } from "./consts.ts";
-import three from "./utils/three.ts";
-import type { Vector3 as VEC } from "https://esm.sh/three";
+import { Matrix4, Vector3 } from "./three.ts";
 
 class ParserContext {
   bfcCertified = false;
@@ -32,7 +32,6 @@ class ParserContext {
 }
 
 export default async function convert(doc: Collected): Promise<LDrawDocuments> {
-  const { Matrix4, Vector3 } = await three();
   const root = doc.get(ROOT_MODEL) as LDrawJson;
   const cache = new Map<string, LDrawDoc>();
   const ctx = new ParserContext();

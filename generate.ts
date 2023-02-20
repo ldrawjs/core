@@ -1,31 +1,30 @@
 import type { LDrawDoc, LDrawDocuments, PART } from "./types.ts";
+import type { GR } from "./three.ts";
 import { ROOT_MODEL } from "./consts.ts";
-import three from "./utils/three.ts";
+import {
+  BufferGeometry,
+  Group,
+  Line,
+  LineBasicMaterial,
+  Mesh,
+  MeshBasicMaterial,
+} from "./three.ts";
 
 // todo handle colors, materials, steps, ...
 
 export default async function generate(docs: LDrawDocuments) {
-  const {
-    BufferGeometry,
-    Group,
-    Line,
-    LineBasicMaterial,
-    Mesh,
-    MeshBasicMaterial,
-  } = await three();
-
   const root = docs.get(ROOT_MODEL) as LDrawDoc;
-  const cache = new Map<string, unknown>();
+  const cache = new Map<string, GR>();
 
   const build = (
     name: PART,
     [_, faces, lines, optLines, parts]: LDrawDoc,
-  ): any /*Group*/ => {
+  ): GR => {
     const group = new Group();
 
     for (const [_, c, partName, matrix] of parts) {
       const part = cache.has(partName)
-        ? (cache.get(partName) as typeof Group)
+        ? (cache.get(partName) as GR)
         : build(partName, docs.get(partName) as LDrawDoc);
       const g = part.clone();
       g.applyMatrix4(matrix);
