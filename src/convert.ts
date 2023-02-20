@@ -1,4 +1,5 @@
 import type {
+    AllLine,
     Collected,
     LDrawDoc,
     LDrawDocuments,
@@ -16,6 +17,8 @@ import type {
 } from './types.js';
 import { LineType, ROOT_MODEL } from './consts.js';
 import ParserContext from './utils/parser-context.js';
+import { Matrix4, Vector3 } from 'three';
+import vectorized from './utils/vectorized';
 
 export default function convert(doc: Collected): LDrawDocuments {
     const root = doc.get(ROOT_MODEL) as LDrawJson;
@@ -29,40 +32,96 @@ export default function convert(doc: Collected): LDrawDocuments {
         const lines: LDrawLineLine[] = [];
         const optLines: LDrawOptLine[] = [];
 
-        for (const line of items) {
-            switch (line[0] as LineType) {
-                case LineType.Meta:
-                    ctx.meta(line as MetaLine);
-                    type = ctx.type;
-                    break;
+        const converters = {
+            [LineType.Meta]: ([_, meta, ...values]: MetaLine) => {
+                switch (meta) {
+                    case '!LDRAW_ORG':
+                        type = values[0];
+                        break;
+                    case '!COLOUR':
+                        // todo complete
+                        break;
+                    case 'FILE':
+                        // todo complete
+                        break;
+                    case 'BFC':
+                        // todo simplify
+                        // update back-face-culling
+                        for (const token of values) {
+                            switch (token) {
+                                case 'CERTIFY':
+                                case 'NOCERTIFY':
+                                    ctx.bfcCertified = token === 'CERTIFY';
+                                    ctx.bfcCCW = true;
+                                    break;
+                                case 'CW':
+                                case 'CCW':
+                                    ctx.bfcCCW = token === 'CCW';
+                                    break;
+                                case 'INVERTNEXT':
+                                    ctx.bfcInverted = true;
+                                    break;
+                                case 'CLIP':
+                                case 'NOCLIP':
+                                    ctx.bfcCull = token === 'CLIP';
+                                    break;
+                            }
+                        }
+                        break;
+                    case 'STEP':
+                        ctx.startingBuildingStep = true;
+                        break;
+                }
+            },
 
-                case LineType.Part:
-                    const sub = ctx.part(line as PartLine);
-                    parts.push(sub);
-                    const subName = sub[2];
-                    if (!cache.has(subName)) {
-                        build(subName, doc.get(subName) as LDrawJson);
-                    }
-                    break;
+            [LineType.Part]: ([type, color, posX, posY, posZ, m0, m1, m2, m3, m4, m5, m6, m7, m8, subName]: PartLine) => {
+                const matrix = new Matrix4().set(
+                    m0, m1, m2, posX,
+                    m3, m4, m5, posY,
+                    m6, m7, m8, posZ,
+                    0, 0, 0, 1
+                );
+                const state = [ctx.bfcInverted, ctx.startingBuildingStep];
+                const sub: LDrawPartLine = [type, color, subName, matrix, state];
+                parts.push(sub);
+                ctx.startingBuildingStep = false;
+                ctx.bfcInverted = false;
+                if (!cache.has(subName)) {
+                    build(subName, doc.get(subName) as LDrawJson);
+                }
+            },
 
-                case LineType.Line:
-                    lines.push(ctx.line(line as LineLine));
-                    break;
+            [LineType.Line]: ([type, color, ...n]: LineLine) => lines.push([type, color, vectorized(...n) as [Vector3, Vector3]]),
 
-                case LineType.OptionalLine:
-                    optLines.push(ctx.optLine(line as OptLine));
-                    break;
+            [LineType.OptionalLine]: ([type, color, ...n]: OptLine) => {
+                const [v0, v1, c0, c1] = vectorized(...n);
+                optLines.push([type, color, [v0, v1], [c0, c1]]);
+            },
 
-                case LineType.Triangle:
-                    const triangles = ctx.triangle(line as TriLine);
-                    faces.push(...triangles);
-                    break;
+            [LineType.Triangle]: ([type, color, ...n]: TriLine) => {
+                const vecs = vectorized(...n);
+                const [v0, v1, v2] = ctx.bfcCCW ? vecs : vecs.reverse();
+                if (ctx.doubleSided) {
+                    faces.push([type, color, [v0, v1, v2]], [type, color, [v2, v1, v0]]);
+                } else {
+                    faces.push([type, color, [v0, v1, v2]]);
+                }
+            },
 
-                case LineType.Quad:
-                    const quad = ctx.quad(line as QuadLine);
-                    faces.push(...quad);
-                    break;
+            [LineType.Quad]: ([type, color, ...n]: QuadLine) => {
+                const vecs = vectorized(...n);
+                const [v0, v1, v2, v3] = ctx.bfcCCW ? vecs : vecs.reverse();
+                if (ctx.doubleSided) {
+                    faces.push([type, color, [v0, v1, v2, v0, v2, v3]], [type, color, [v3, v2, v0, v2, v1, v0]]);
+                } else {
+                    faces.push([type, color, [v0, v1, v2, v0, v2, v3]])
+                }
             }
+        };
+
+        for (const line of items) {
+            const action = converters[line[0] as LineType];
+            action(line as AllLine);
         }
 
         const res: LDrawDoc = [type, faces, lines, optLines, parts];

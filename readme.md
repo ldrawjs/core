@@ -17,3 +17,10 @@ Takes `Collected` and return JSON `LDrawDocuments`.
 ### generate
 
 Takes `LDrawDocuments` and return `Three` group.
+
+
+## Open Issues
+
+* add colors support
+* add material support
+* add steps support (require document/interface change)
