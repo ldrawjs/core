@@ -1,3 +1,4 @@
+import type { Matrix4 as MAT, Vector3 as VEC } from "https://esm.sh/three";
 import { LineType } from "./consts.ts";
 
 export type N = number;
@@ -83,19 +84,19 @@ export type CollectedRaw = [string, LDrawJson][];
  * LDrawDoc / LDrawDocuments
  * @see TBC (THREE)
  */
-export type LDrawPartLine<M = any> = [LineType.Part, C, PART, M, boolean[]];
-export type LDrawLineLine<V = any> = [LineType.Line, C, [V, V]];
-export type LDrawTriLine<V = any> = [LineType.Triangle, C, [V, V, V]];
-export type LDrawQuadLine<V = any> = [
+export type LDrawPartLine = [LineType.Part, C, PART, MAT, boolean[]];
+export type LDrawLineLine = [LineType.Line, C, [VEC, VEC]];
+export type LDrawTriLine = [LineType.Triangle, C, [VEC, VEC, VEC]];
+export type LDrawQuadLine = [
   LineType.Quad,
   C,
-  [V, V, V, V, V, V],
+  [VEC, VEC, VEC, VEC, VEC, VEC],
 ];
-export type LDrawOptLine<V = any> = [
+export type LDrawOptLine = [
   LineType.OptionalLine,
   C,
-  [V, V],
-  [V, V],
+  [VEC, VEC],
+  [VEC, VEC],
 ];
 
 export type LDrawFaced = LDrawTriLine | LDrawQuadLine;

@@ -17,6 +17,7 @@ import type {
 } from "./types.ts";
 import { LineType, ROOT_MODEL } from "./consts.ts";
 import three from "./utils/three.ts";
+import type { Vector3 as VEC } from "https://esm.sh/three";
 
 class ParserContext {
   bfcCertified = false;
@@ -37,7 +38,7 @@ export default async function convert(doc: Collected): Promise<LDrawDocuments> {
   const ctx = new ParserContext();
 
   const vectorized = (...points: number[]) => {
-    const vec: any[] = [];
+    const vec: VEC[] = [];
     while (points.length) {
       const [x, y, z] = points.splice(0, 3);
       vec.push(new Vector3(x, y, z));
@@ -142,7 +143,7 @@ export default async function convert(doc: Collected): Promise<LDrawDocuments> {
       },
 
       [LineType.Line]: ([type, color, ...n]: LineLine) =>
-        lines.push([type, color, vectorized(...n) as [any, any]]),
+        lines.push([type, color, vectorized(...n) as [VEC, VEC]]),
 
       [LineType.OptionalLine]: ([type, color, ...n]: OptLine) => {
         const [v0, v1, c0, c1] = vectorized(...n);

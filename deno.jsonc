@@ -1,5 +1,5 @@
 {
   "tasks": {
-  "npm":"deno bundle mod.ts > index.js"
+    "npm": "deno bundle mod.ts > index.js"
   }
 }
