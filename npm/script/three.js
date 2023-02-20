@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Vector3 = exports.MeshBasicMaterial = exports.Mesh = exports.Matrix4 = exports.LineBasicMaterial = exports.Line = exports.Group = exports.BufferGeometry = void 0;
+var three_1 = require("three");
+Object.defineProperty(exports, "BufferGeometry", { enumerable: true, get: function () { return three_1.BufferGeometry; } });
+Object.defineProperty(exports, "Group", { enumerable: true, get: function () { return three_1.Group; } });
+Object.defineProperty(exports, "Line", { enumerable: true, get: function () { return three_1.Line; } });
+Object.defineProperty(exports, "LineBasicMaterial", { enumerable: true, get: function () { return three_1.LineBasicMaterial; } });
+Object.defineProperty(exports, "Matrix4", { enumerable: true, get: function () { return three_1.Matrix4; } });
+Object.defineProperty(exports, "Mesh", { enumerable: true, get: function () { return three_1.Mesh; } });
+Object.defineProperty(exports, "MeshBasicMaterial", { enumerable: true, get: function () { return three_1.MeshBasicMaterial; } });
+Object.defineProperty(exports, "Vector3", { enumerable: true, get: function () { return three_1.Vector3; } });
