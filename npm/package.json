@@ -3,7 +3,7 @@
   "main": "./script/mod.js",
   "types": "./types/mod.d.ts",
   "name": "@ldrawjs/core",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "description": "utils",
   "license": "MIT",
   "repository": {
