@@ -16,9 +16,29 @@ import type {
     TriLine
 } from './types.js';
 import { LineType, ROOT_MODEL } from './consts.js';
-import ParserContext from './utils/parser-context.js';
 import { Matrix4, Vector3 } from 'three';
-import vectorized from './utils/vectorized';
+
+function vectorized(...points: number[]) {
+    const vec: Vector3[] = [];
+    while (points.length) {
+        const [x, y, z] = points.splice(0, 3);
+        vec.push(new Vector3(x, y, z));
+    }
+    return vec;
+}
+
+class ParserContext {
+    bfcCertified = false;
+    bfcCCW = true;
+    bfcInverted = false;
+    bfcCull = true;
+    startingBuildingStep = false;
+
+    get doubleSided(): boolean {
+        return !this.bfcCertified || !this.bfcCull;
+    }
+}
+
 
 export default function convert(doc: Collected): LDrawDocuments {
     const root = doc.get(ROOT_MODEL) as LDrawJson;
