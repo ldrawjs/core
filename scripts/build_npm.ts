@@ -9,9 +9,9 @@ await build({
     entryPoints: ["./mod.ts"],
     outDir: "./npm",
     typeCheck: false,
+    test: false,
+    skipSourceOutput: true,
     shims: {
-        // see JS docs for overview and more options
-        // deno: true,
     },
     mappings: {
         "https://esm.sh/three": {
